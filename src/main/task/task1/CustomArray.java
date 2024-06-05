@@ -5,11 +5,12 @@ import java.util.Iterator;
 /**
  * This class that implements a custom array data structure with methods to add elements, add elements at a specific index,add an array of elements,
  * remove element at a specific index, remove all element from the list, as well as a method for iterating over a list
+ *
  * @param <E> the type of elements in this list
- * @author  Alexander Azaronak
+ * @author Alexander Azaronak
  * @version 1.0
  */
-public class CustomArray<E> implements Function<E>{
+public class CustomArray<E> implements Function<E> {
 
     /**
      * The array buffer into which the elements of the ArrayList are stored.
@@ -17,7 +18,7 @@ public class CustomArray<E> implements Function<E>{
      * empty ArrayList with elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA
      * will be expanded to DEFAULT_CAPACITY when the first element is added.
      */
-    private E[] valuse;
+    private E[] customArray;
     /**
      * The size of the CustomArray (the number of elements it contains).
      */
@@ -27,24 +28,26 @@ public class CustomArray<E> implements Function<E>{
      * Shared empty array instance used for empty instances.Shared empty array instance used for empty instances.
      */
     private static final Object[] DEFAULT_CAPACITY_EMPTY_ELEMENT_DATA = {};
+
     /**
-     Constructs an empty list with an initial capacity of ten.
+     * Constructs an empty list with an initial capacity of ten.
      */
-    public CustomArray(){
-        valuse  = (E[]) DEFAULT_CAPACITY_EMPTY_ELEMENT_DATA;
+    public CustomArray() {
+        customArray = (E[]) DEFAULT_CAPACITY_EMPTY_ELEMENT_DATA;
     }
+
     /**
      * Constructs an empty list with the specified initial capacity.
      *
-     * @param  capacity  the initial capacity of the list
+     * @param capacity the initial capacity of the list
      * @throws IllegalArgumentException if the specified initial capacity
-     *         is negative
+     *                                  is negative
      */
-    public CustomArray(int capacity){
-        if(capacity < 0){
+    public CustomArray(int capacity) {
+        if (capacity < 0) {
             throw new IllegalArgumentException("Negative capacity");
         }
-        valuse = (E[]) new Object[capacity];
+        customArray = (E[]) new Object[capacity];
     }
 
     /**
@@ -55,60 +58,43 @@ public class CustomArray<E> implements Function<E>{
      * @throws NullPointerException if the specified element is null
      */
     public boolean add(E element) {
-        if(element == null){
+        if (element == null) {
             throw new NullPointerException("Null insert");
         }
-        try {
-            E[] temp = valuse;
-            valuse = (E[]) new Object[valuse.length + 1];
-            for(int i = 0; i < temp.length; i++){
-                valuse[i] = temp[i];
-            }
-            valuse[valuse.length - 1] = element;
-            size++;
-            return true;
-        }catch (ClassCastException | NullPointerException e){
-            e.printStackTrace();
-        }
-        return false;
+        arrayExpansion(element);
+        customArray[customArray.length - 1] = element;
+        return true;
     }
+
     /**
      * Inserts the specified element at the specified position in this list.
      * Shifts the element currently at that position (if any) and any subsequent
      * elements to the right (adds one to their indices).
      *
      * @param element the element to be inserted
-     * @param index the index at which the element is to be inserted
+     * @param index   the index at which the element is to be inserted
      * @return {@code true} if the element has been added to the collection
-     * @throws NullPointerException if the specified element is null
+     * @throws NullPointerException      if the specified element is null
      * @throws IndexOutOfBoundsException if the index is out of range
-     * ({@code index < 0 || index > size()})
+     *                                   ({@code index < 0 || index > size()})
      */
 
     public boolean addByIndex(E element, int index) {
-        if(element == null){
+        if (element == null) {
             throw new NullPointerException("Null insert");
         }
-        if(index <  0 || index > valuse.length){
+        if (index < 0 || index > customArray.length) {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
-        try {
-            E[] temp = valuse;
-            valuse = (E[]) new Object[valuse.length + 1];
-            for(int i = 0; i < temp.length; i++){
-                valuse[i] = temp[i];
-            }
-            valuse[index] = element;
-            for (int i = index + 1; i < temp.length + 1; i++) {
-                valuse[i] = temp[i - 1];  // Shift elements after the insertion index
-            }
-            size++;
-            return true;
-        }catch (ClassCastException | IndexOutOfBoundsException e){
-            e.printStackTrace();
+        E[] temp = customArray;
+        arrayExpansion(element);
+        customArray[index] = element;
+        for (int i = index + 1; i < temp.length + 1; i++) {
+            customArray[i] = temp[i - 1];  // Shift elements after the insertion index
         }
-        return false;
+        return true;
     }
+
     /**
      * Adds all the elements of the specified array to this list.
      * The array must not contain any null elements.
@@ -116,41 +102,32 @@ public class CustomArray<E> implements Function<E>{
      * @param elements the array of elements to be added
      * @return {@code true} if this list changed as a result of the call
      * @throws NullPointerException if the array contains any null elements
-     * @throws ClassCastException if the array's elements are not of the same type as this list's elements
+     * @throws ClassCastException   if the array's elements are not of the same type as this list's elements
      */
     public boolean addArray(E[] elements) {
-        for(E element : elements){
-            if (element == null){
+        for (E element : elements) {
+            if (element == null) {
                 throw new NullPointerException("Array contain null");
             }
         }
-        try {
-            E[] temp = valuse;
-            int count = 0;
-            valuse = (E[]) new Object[valuse.length + elements.length];
-            for(int i = 0; i < temp.length; i++){
-                valuse[i] = temp[i];
-                count++;
-            }
-            for(int i = 0; i < elements.length; i++){
-                valuse[count] = elements[i];
-                count++;
-            }
-            size+=elements.length;
-            return true;
-        }catch (ClassCastException e){
-            e.printStackTrace();
+        int oldArrayLength = customArray.length;
+        arrayExpansion(elements);
+        for (int i = 0; i < elements.length; i++) {
+            customArray[oldArrayLength] = elements[i];
+            oldArrayLength++;
         }
-        return false;
+        return true;
     }
 
     /**
      * Returning the size of a given array
+     *
      * @return int size of the array
      */
     public int size() {
         return size;
     }
+
     /**
      * Removes the element at the specified index in this list.
      * Shifts any subsequent elements to the left (subtracts one from their
@@ -161,35 +138,42 @@ public class CustomArray<E> implements Function<E>{
      * @throws IndexOutOfBoundsException if the index is out of bounds (index &lt; 0 || index &gt;= size())
      */
     public boolean remove(int index) {
-        if(index <  0 || index > valuse.length){
+        if (index < 0 || index > customArray.length) {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
         try {
-            E[] temp = valuse;
-            valuse = (E[]) new Object[valuse.length - 1];
-            for(int i = 0; i < temp.length; i++) {
-                if(i != index) {
+            E[] temp = customArray;
+            customArray = (E[]) new Object[customArray.length - 1];
+            for (int i = 0; i < temp.length; i++) {
+                if (i != index) {
                     int newIndex = i < index ? i : i - 1;
-                    valuse[newIndex] = temp[i];
+                    customArray[newIndex] = temp[i];
                 }
             }
             size--;
             return true;
-        }catch (ClassCastException e){
+        } catch (ClassCastException e) {
             e.printStackTrace();
         }
         return false;
     }
+
     /**
      * Removes all elements from the list. This resets the size of the list to 0.
      *
      * @return {@code true} since this operation is always successful
      */
     public boolean removeAll() {
-        size = 0;
-        valuse = (E[]) DEFAULT_CAPACITY_EMPTY_ELEMENT_DATA;
-        return true;
+        try {
+            size = 0;
+            customArray = (E[]) DEFAULT_CAPACITY_EMPTY_ELEMENT_DATA;
+            return true;
+        }catch (ClassCastException e){
+            e.printStackTrace();
+        }
+        return false;
     }
+
     /**
      * Gets the element at the specified index in this array.
      *
@@ -199,39 +183,73 @@ public class CustomArray<E> implements Function<E>{
      */
     @Override
     public E getByIndex(int index) {
-        if(index <  0 || index > valuse.length){
+        if (index < 0 || index > customArray.length) {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
-        return valuse[index];
+        return customArray[index];
     }
+
     /**
      * Replaces the element at the specified index in this list with the specified element.
      *
-     * @param index the index of the element to replace
+     * @param index   the index of the element to replace
      * @param element the element to be stored at the specified position
      * @return the element previously at the specified position
-     * @throws NullPointerException if the specified element is null
+     * @throws NullPointerException      if the specified element is null
      * @throws IndexOutOfBoundsException if the index is out of range
-     *         ({@code index < 0 || index >= size()})
+     *                                   ({@code index < 0 || index >= size()})
      */
     @Override
     public E setIndex(int index, E element) {
-        if(element == null){
+        if (element == null) {
             throw new NullPointerException("Null insert");
         }
-        if(index <  0 || index > valuse.length){
+        if (index < 0 || index > customArray.length) {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
-        E oldValue = valuse[index];
-        valuse[index] = element;
+        E oldValue = customArray[index];
+        customArray[index] = element;
         return oldValue;
     }
 
     /**
      * Returns a custom array iterator.
+     *
      * @return a custom array iterator
      */
     public Iterator<E> iterator() {
-        return new CustomArrayIterator<>(valuse);
+        return new CustomArrayIterator<>(customArray);
     }
+
+    private E[] arrayExpansion(E element) {
+        try {
+            E[] temp = customArray;
+            customArray = (E[]) new Object[customArray.length + 1];
+            for (int i = 0; i < temp.length; i++) {
+                customArray[i] = temp[i];
+            }
+            size++;
+            return customArray;
+        } catch (ClassCastException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private E[] arrayExpansion(E[] elements) {
+        try {
+            E[] temp = customArray;
+            customArray = (E[]) new Object[customArray.length + elements.length];
+            for (int i = 0; i < temp.length; i++) {
+                customArray[i] = temp[i];
+            }
+            size += elements.length;
+            return customArray;
+        }catch (ClassCastException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

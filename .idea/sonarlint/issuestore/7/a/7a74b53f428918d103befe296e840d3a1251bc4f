@@ -1,0 +1,17 @@
+
+<
+java:S1700"Rename field "customArray"(½æ•ùÿÿÿÿ8¹©™Ïş1
+q
+java:S1192W"TDefine a constant instead of duplicating this literal "Index out of bounds" 4 times.(Şèú»8Ë©™Ïş1
+n
+java:S1192>"LDefine a constant instead of duplicating this literal "Null insert" 3 times.(¢òÊ°şÿÿÿÿ8Í©™Ïş1
+Q
+java:S1172à".Remove this unused method parameter "element".(Ïğ‹¡ÿÿÿÿÿ8è«™Ïş1
+w
+java:S3012å"YUse "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.(øµÜÛ8‡¬™Ïş1
+D
+java:S1168ì"&Return an empty array instead of null.(¥¹ï8›¬™Ïş1
+w
+java:S3012ô"YUse "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.(øµÜÛ8´¬™Ïş1
+D
+java:S1168û"&Return an empty array instead of null.(¥¹ï8½¬™Ïş1
